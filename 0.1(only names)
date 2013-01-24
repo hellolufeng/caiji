@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import org.jsoup.nodes.*;
+import org.jsoup.*;
+import org.jsoup.select.*;
+public class Main{
+
+  public static void main(String[] args) throws IOException{
+        String Url="http://search.china.alibaba.com/company/company_search.htm?keywords=%D0%EC%D6%DD&n=y&from=";
+		URL url = null;
+		try {
+			url = new URL(Url);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+        BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(url.openStream()));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}  
+        String s = "";  
+        String strGet="";
+        try {
+			while ((s = br.readLine()) != null) {  
+				strGet=strGet+s ;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   
+        br.close();
+				Document doc = Jsoup.parse(strGet);
+				Elements names = doc.select("h2>a");
+				int count=0;
+				for(Element name : names){
+					String result = name.attr("title");
+					count++;
+					System.out.println("第"+count+"个公司:"+result);	
+				}
+	}
+	
+}
